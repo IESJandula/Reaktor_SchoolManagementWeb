@@ -88,18 +88,14 @@ const eliminarBloque = async (asignatura) => {
   errorMensaje.value = "";
 
   try {
-    await axios.delete(`http://localhost:8081/direccionVentana3/eliminarBloque`, null, {
-      params: {
+    await axios.delete('http://localhost:8081/direccionVentana3/eliminarBloque', {
+      data: {
         curso: props.curso,
         etapa: props.etapa,
-        asignatura: asignatura.nombre,
+        nombre: asignatura.nombre,
         grupo: asignatura.grupo
-      },
-
-      
+      }
     });
-
-    console.log(props.curso, props.etapa, asignatura.nombre, asignatura.grupo)
 
     console.log(`Bloque eliminado para la asignatura: ${asignatura.nombre}`);
     cargarAsignaturas();
