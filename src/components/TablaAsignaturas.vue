@@ -88,14 +88,18 @@ const eliminarBloque = async (asignatura) => {
   errorMensaje.value = "";
 
   try {
-    await axios.delete(`http://localhost:8081/direccionVentana3/eliminarBloque`, {
+    await axios.delete(`http://localhost:8081/direccionVentana3/eliminarBloque`, null, {
       params: {
         curso: props.curso,
         etapa: props.etapa,
         asignatura: asignatura.nombre,
         grupo: asignatura.grupo
       },
+
+      
     });
+
+    console.log(props.curso, props.etapa, asignatura.nombre, asignatura.grupo)
 
     console.log(`Bloque eliminado para la asignatura: ${asignatura.nombre}`);
     cargarAsignaturas();
@@ -136,7 +140,7 @@ watch([() => props.curso, () => props.etapa], cargarAsignaturas, { immediate: tr
         </thead>
         <tbody>
           <tr v-for="asignatura in asignaturas" :key="`${asignatura.curso}-${asignatura.etapa}-${asignatura.nombre}`">
-            <td>
+            <td class="text-center px-4">
               <input type="checkbox" v-model="asignaturasSeleccionadas" :value="asignatura" />
             </td>
             <td class="border border-gray-400 px-4 py-2">{{ asignatura.nombre }}</td>
