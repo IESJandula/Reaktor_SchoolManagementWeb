@@ -137,7 +137,13 @@ watch([() => props.curso, () => props.etapa], cargarAsignaturas, { immediate: tr
         <tbody>
           <tr v-for="asignatura in asignaturas" :key="`${asignatura.curso}-${asignatura.etapa}-${asignatura.nombre}`">
             <td class="text-center px-4">
-              <input type="checkbox" v-model="asignaturasSeleccionadas" :value="asignatura" />
+              <input
+              type="checkbox"
+              :disabled="asignatura.bloqueId !== undefined && asignatura.bloqueId !== null"
+              v-model="asignaturasSeleccionadas"
+              :value="asignatura"
+              
+            />
             </td>
             <td class="border border-gray-400 px-4 py-2">{{ asignatura.nombre }}</td>
             <td class="border border-gray-400 px-4 py-2">{{ asignatura.grupo }}</td>
