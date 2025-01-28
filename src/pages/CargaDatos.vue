@@ -108,7 +108,9 @@ const obtenerGrupos = async ( curso, etapa ) => {
     }
 };
 
-// Función asíncrona para cargar los datos de cursos y etapas desde el servidor
+/*
+ * Funcion para alimentar el combobox de 
+ */
 const obtenerAlumnos = async ( cursoP, etapa, grupo ) => {
     try {
 
@@ -134,8 +136,6 @@ const obtenerAlumnos = async ( cursoP, etapa, grupo ) => {
         // Asigna los datos obtenidos a la variable reactiva
         console.log("DESPUES DE PETICION");
         console.log(response.data);
-
-        // inicialirzar combo grupos
         
         }
 
@@ -144,11 +144,6 @@ const obtenerAlumnos = async ( cursoP, etapa, grupo ) => {
         console.error('Error al cargar alumnos', error);
     }
 };
-
-// al presionar el boton debe recueprar un listado de alumnos pertenecientes a los parametros asociados.
-// deben de estar en esa etapa y curso, ya sea con grupo asignado o no.
-// endpoint -> /grupos/alumnos
-// parametros -> curso (int) , etapa (string) , gruop (char)
 
 </script>
 
@@ -167,7 +162,8 @@ const obtenerAlumnos = async ( cursoP, etapa, grupo ) => {
     
     <button  @click="obtenerAlumnos( filtroSeleccionado.curso, filtroSeleccionado.etapa, grupoSeleccionado )" class="p-2 border border-gray-300 rounded-md" style="margin-top: 20px;" > Cargar alumnos.</button>
 
-
+    <ListViewAlumnos/>
+    
   </div>
 </template>
 

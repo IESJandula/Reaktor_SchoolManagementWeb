@@ -16,7 +16,7 @@ const seleccionado = ref('');
 const cargarCursosEtapas = async () => {
     try {
         // Realiza una petición HTTP GET para obtener los datos
-        const response = await axios.get('http://localhost:8081/direccionVentana3/etapaCursos');
+        const response = await axios.get('http://localhost:8081/direccion/cursoEtapa');
         // Asigna los datos obtenidos a la variable reactiva
         cursosEtapas.value = response.data;
     } catch (error) {
@@ -63,10 +63,10 @@ const actualizarSelect = () => {
             <!-- Genera las opciones dinámicamente desde los datos obtenidos -->
             <option 
                 v-for="cursoEtapa in cursosEtapas" 
-                :key="`${cursoEtapa.idCursoEtapa.curso}-${cursoEtapa.idCursoEtapa.etapa}`"
-                :value="`${cursoEtapa.idCursoEtapa.curso}-${cursoEtapa.idCursoEtapa.etapa}`"
+                :key="`${cursoEtapa.curso}-${cursoEtapa.etapa}`"
+                :value="`${cursoEtapa.curso}-${cursoEtapa.etapa}`"
             >
-                {{ cursoEtapa.idCursoEtapa.curso }} {{ cursoEtapa.idCursoEtapa.etapa }}
+                {{ cursoEtapa.curso }} {{ cursoEtapa.etapa }}
             </option>
         </select>
     </div>
