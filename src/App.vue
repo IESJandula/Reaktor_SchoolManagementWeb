@@ -15,6 +15,9 @@
           <li>
             <router-link to="/ventana2" class="hover:underline">Ventana 2</router-link>
           </li>
+          <li>
+            <router-link to="/ventana3" class="hover:underline">Ventana 3</router-link>
+          </li>
         </ul>
       </div>
     </nav>
