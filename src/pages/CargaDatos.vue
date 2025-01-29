@@ -3,12 +3,15 @@ import FilterCursoEtapa from '../components/FilterCursoEtapa.vue'; // Componente
 import { ref } from 'vue'; // Composables de Vue para trabajar con datos reactivos
 import axios from 'axios';
 import ComboGrupos from '../components/ComboGrupos.vue';
+import ListViewAlumnos from '../components/ListViewAlumnos.vue';
 
 // Variable reactiva que almacena el filtro seleccionado (curso y etapa)
 const filtroSeleccionado = ref({ curso: null, etapa: '' });
 
 // Declara la variable reactiva con un valor inicial
 const grupoSeleccionado = ref('');
+
+var listadoAlumnos = ref([])
 
 // Define la variable que almacenará el mensaje de éxito
 const resultadoGrupos = ref('');  // Usamos ref para que sea reactivo
@@ -28,6 +31,9 @@ const actualizarSelect = (parametro) => {
 const actualizarGrupo = (parametro) => {
     grupoSeleccionado.value = parametro;
     console.log("Filtro grupos actualizado:", grupoSeleccionado.value);
+
+    // reinicia la lista de alumnos recuperada anteriormente.
+    listadoAlumnos.value=[];
 };
 
 
@@ -57,6 +63,9 @@ const crearNuevoGrupo = async (curso, etapa) => {
 
             // actualiza el listado actual.
             obtenerGrupos(cursoInt, etapa);
+
+            // falta mecanismo para actualizar el grupo seleccionado.
+            actualizarGrupo();
 
         } else {
             // Si la respuesta no es 200, mostramos otro mensaje
@@ -136,7 +145,7 @@ const obtenerAlumnos = async ( cursoP, etapa, grupo ) => {
         // Asigna los datos obtenidos a la variable reactiva
         console.log("DESPUES DE PETICION");
         console.log(response.data);
-        
+        listadoAlumnos.value = response.data;
         }
 
     } catch (error) {
@@ -147,6 +156,7 @@ const obtenerAlumnos = async ( cursoP, etapa, grupo ) => {
 
 </script>
 
+
 <template>
   <div class="flex flex-col items-center justify-center flex-grow">
     <h1 class="text-4xl font-bold" style="margin-bottom: 50px">CARGA DATOS</h1>
@@ -156,14 +166,15 @@ const obtenerAlumnos = async ( cursoP, etapa, grupo ) => {
     
     <h1> {{ resultadoGrupos }} </h1>
     
-    <button @click="crearNuevoGrupo(filtroSeleccionado.curso, filtroSeleccionado.etapa)" class="p-2 border border-gray-300 rounded-md" style="margin-top: 20px;" > Crea grupo.</button>
+    <button @click="crearNuevoGrupo(filtroSeleccionado.curso, filtroSeleccionado.etapa)" class="p-2 border border-gray-300 rounded-md bg-blue-500 text-white" style="margin-top: 20px;" > Crea grupo.</button>
     
     <ComboGrupos @actualizar-grupos="actualizarGrupo" :grupos="grupos" style="margin-top:20px"/>
     
-    <button  @click="obtenerAlumnos( filtroSeleccionado.curso, filtroSeleccionado.etapa, grupoSeleccionado )" class="p-2 border border-gray-300 rounded-md" style="margin-top: 20px;" > Cargar alumnos.</button>
+    <button  @click="obtenerAlumnos( filtroSeleccionado.curso, filtroSeleccionado.etapa, grupoSeleccionado )" class="p-2 border border-gray-300 rounded-md bg-blue-500 text-white" style="margin-top: 20px;" > Cargar alumnos.</button>
 
-    <ListViewAlumnos/>
-    
+    <!-- Recibe listado de alumnos y parametros necesarios para hacer la llamada al backend-->
+    <ListViewAlumnos :alumnos="listadoAlumnos" :grupoSeleccionado="grupoSeleccionado" :etapa="filtroSeleccionado.etapa" :curso="filtroSeleccionado.curso"/>
+
   </div>
 </template>
 
