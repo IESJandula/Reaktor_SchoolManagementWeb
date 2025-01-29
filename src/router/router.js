@@ -2,7 +2,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
 // Importación de los componentes que se utilizarán como páginas
-import Ventana2Page from '@/pages/Ventana2Page.vue'; // Página para la ruta '/ventana2'
 import HomePage from '@/pages/HomePage.vue'; // Página principal de la aplicación
 import CargaDatos from '@/pages/CargaDatos.vue'; // Página para la ruta '/ventana3'
 
@@ -14,13 +13,8 @@ const routes = [
     component: HomePage, // Componente que se mostrará al acceder a esta ruta
   },
   {
-    path: '/ventana2', // Ruta para la página "Ventana 2"
-    name: 'Ventana2', // Nombre único de la ruta
-    component: Ventana2Page, // Componente que se mostrará en esta ruta
-  },
-  {
-    path: '/ventana3', // Ruta para la página "Ventana 3"
-    name: 'Ventana3', // Nombre único de la ruta
+    path: '/carga-datos', // Ruta para la página "Carga datos"
+    name: 'CargaDatos', // Nombre único de la ruta
     component: CargaDatos, // Componente que se mostrará en esta ruta
   }
 ];

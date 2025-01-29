@@ -1,5 +1,6 @@
 <script>
 import axios from 'axios';
+import TablaAlumnosGrupo from '@/components/TablaAlumnosGrupo.vue';
 
 /**
  * Autor: David Jason Gianmoena.
@@ -12,10 +13,13 @@ import axios from 'axios';
  * Funcionalidad:
  * - Escucha cambios en la propiedad 'grupoSeleccionado' y actualiza el estado del grupo en los alumnos.
  * - Permite marcar o desmarcar un grupo a cada alumno individualmente.
- * - Al enviar los datos con el boton, se llama al backend con los datos actualizados.
+ * - Al enviar los datos con el botón, se llama al backend con los datos actualizados.
  */
 
 export default {
+  components: {
+    TablaAlumnosGrupo
+  },
   props: {
     // Lista de alumnos recibida desde el componente padre
     alumnos: {
@@ -38,7 +42,6 @@ export default {
   },
 
   methods: {
-
     /**
      * Función que se ejecuta cuando el estado del checkbox de un alumno cambia.
      * Asigna o limpia el grupo del alumno dependiendo del estado del checkbox.
@@ -67,78 +70,74 @@ export default {
 
     /**
      * Función para enviar los datos de la lista de alumnos actualizada al backend.
-     * CONTROLAR <-----------------------------------------------------------------------------------------------------------------------------
-     *      * CONTROLAR <-----------------------------------------------------------------------------------------------------------------------------
-     *      * CONTROLAR <-----------------------------------------------------------------------------------------------------------------------------
-     *      * CONTROLAR <-----------------------------------------------------------------------------------------------------------------------------
-     *      * CONTROLAR <-----------------------------------------------------------------------------------------------------------------------------
-     *      * CONTROLAR <-----------------------------------------------------------------------------------------------------------------------------
      */
-    async enviarDatos () {
-        console.log('Datos enviados:', this.alumnos);
+    async enviarDatos() {
+      console.log('Datos enviados:', this.alumnos);
 
-        try {
-            // Define los headers con los valores del curso, etapa y grupo
-            const headers = {
-                'curso': this.curso,    // Valor del curso
-                'etapa': this.etapa,    // Valor de la etapa
-                'grupo': this.grupoSeleccionado // Valor del grupo seleccionado
-            };
+      try {
+        const cursoInt32 = parseInt(this.curso, 10);
 
-            const data = this.alumnos;  // Asegúrate de que `alumnos` sea una lista o datos válidos
+        // Define los params con los valores del curso, etapa y grupo
+        const params = {
+          curso: cursoInt32,    // Valor del curso
+          etapa: this.etapa,    // Valor de la etapa
+          grupo: this.grupoSeleccionado // Valor del grupo seleccionado
+        };
 
-            // Realiza la petición POST, enviando los headers y el listado de alumnos
-            const response = await axios.post('http://localhost:8081/direccion/grupos/alumnos', data, { headers });
+        // `alumnos` debe ser un array válido
+        const data = this.alumnos;
 
-            // Si la solicitud es exitosa, se imprime la respuesta
-            console.log('Respuesta del servidor:', response.data);
+        // Realiza la petición POST correctamente
+        const response = await axios.post('http://localhost:8081/direccion/grupos/alumnos', 
+          data,  // Enviar solo los datos en el cuerpo
+          { params } // Enviar los parámetros en la URL
+        );
 
-        } catch (error) {
-            // Maneja errores en caso de que la solicitud falle
-            console.error('Error al crear grupo:', error);
-        }
+        console.log('Respuesta del servidor:', response.data);
+      } catch (error) {
+        console.error('Error al enviar alumnos:', error);
+      }
     }
-
-
-  } //metodo
-
-}; // export
-
-
+  }
+};
 </script>
 
 <template>
   <!-- Lista de alumnos con desplazamiento vertical habilitado si es necesario -->
   <ul class="p-3 m-3 border border-gray-300 overflow-auto max-h-60">
-
     <!-- Si la lista de alumnos está vacía, muestra un mensaje indicativo -->
     <li v-if="alumnos.length === 0">Cargue un listado de alumnos.</li>
     
     <!-- Itera sobre los alumnos y genera un <li> para cada uno -->
     <li v-for="(alumno, index) in alumnos" :key="index" class="p-2 m-1 border border-gray-300 rounded-md">
-      
-      <!-- Checkbox para seleccionar el grupo de un alumno. 
-           Se marca si el grupo del alumno coincide con el grupo seleccionado -->
+      <!-- Checkbox para seleccionar el grupo de un alumno -->
       <input 
         type="checkbox" 
         :checked="alumno.grupo === grupoSeleccionado" 
         @change="actualizaEstadoGrupoAlumno(index)"  
       />
-      
       <!-- Muestra el nombre y los apellidos del alumno -->
-      {{ alumno.nombre }} 
-      {{ alumno.apellidos }}
+      {{ alumno.nombre }} {{ alumno.apellidos }}
     </li>
   </ul>
 
   <!-- Botón para enviar los datos actualizados de la lista de alumnos -->
-  <button @click="enviarDatos" class="p-2 border border-gray-300 rounded-md bg-blue-500 text-white" style="margin-top: 20px;">
-    Enviar datos.
+  <button 
+    @click="enviarDatos" 
+    class="p-2 border border-gray-300 rounded-md bg-blue-500 text-white mt-4">
+    Enviar datos
   </button>
+
+  <!-- Renderiza la tabla de alumnos si hay un grupo seleccionado -->
+  <TablaAlumnosGrupo 
+    v-if="grupoSeleccionado"  
+    :curso="curso" 
+    :etapa="etapa" 
+    :grupo="grupoSeleccionado" 
+  />
 </template>
 
 <style scoped>
-
 ul {
   max-height: 300px; /* Tamaño contenedor lista */
   overflow-y: auto; /* Habilita el scroll cuando lista larga */
