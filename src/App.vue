@@ -13,6 +13,9 @@
             <router-link to="/" class="hover:underline">Inicio</router-link>
           </li>
           <li>
+            <router-link to="/carga-datos" class="hover:underline">Carga Datos</router-link>
+          </li>
+          <li>
             <router-link to="/ventana2" class="hover:underline">Ventana 2</router-link>
           </li>
           <li>
